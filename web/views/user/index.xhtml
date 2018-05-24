@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="./../template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+                <p:growl id="msgs" showDetail="true" />
+                
+                <h:form>
+                    <p:commandButton id="btnCreateUser" update=":formCreate" oncomplete="PF('dialogUserCreate').show();" icon="ui-icon-disk" title="Create" value="Create"/> 
+                </h:form>
+                
+                <h:form id="formDataTable">
+                    <p:dataTable id="users" var="user" value="#{userBean.users}" >
+                        
+                        <f:facet name="header">  
+                            List of Users
+                        </f:facet>
+                        
+                        <p:column headerText="Id" style="width:10%">
+                            <h:outputText value="#{user.id}" />
+                        </p:column>
+                        <p:column headerText="Username" style="width:10%">
+                            <h:outputText value="#{user.username}" />
+                        </p:column>
+                        <p:column headerText="Password" style="width:10%">
+                            <h:outputText value="#{user.password}" />
+                        </p:column>
+                        <p:column headerText="Name" style="width:10%">
+                            <h:outputText value="#{user.name}" />
+                        </p:column>
+                        <p:column headerText="Email" style="width:10%">
+                            <h:outputText value="#{user.email}" />
+                        </p:column>
+                        <p:column headerText="Role" style="width:10%">
+                            <h:outputText value="#{user.role.name}" />
+                        </p:column>
+                        
+                        <p:column style="width:6%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('dialogUserUpdate').show();" icon="ui-icon-pencil" title="Modify" value="Modify">  
+                                <f:setPropertyActionListener value="#{user}" target="#{userBean.selectedUser}" />  
+                            </p:commandButton>  
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('dialogUserDelete').show();" icon="ui-icon-close" title="Delete" value="Delete" >  
+                                <f:setPropertyActionListener value="#{user}" target="#{userBean.selectedUser}" />  
+                            </p:commandButton> 
+                        </p:column>
+                    </p:dataTable>    
+                </h:form>
+                
+                <h:form id="formCreate">
+                    <p:dialog header="Create User" widgetVar="dialogUserCreate" resizable="false" id="dlgUserCreate"  
+                              showEffect="fade" hideEffect="explode" modal="true">  
+                        <h:panelGrid id="display" columns="2" cellpadding="6" style="margin:0 auto;">  
+
+                            <h:outputText value="Role:" />  
+                            <p:selectOneMenu value="#{userBean.selectedUser.role.id}">  
+                                <f:selectItem itemLabel="- Select -" itemValue = "" />  
+                                <f:selectItems value="#{roleBean.selectOneItemsRole}" />  
+                            </p:selectOneMenu> 
+                             
+                            <h:outputText value="Username: " />  
+                            <p:inputText value="#{userBean.selectedUser.username}"/>  
+                            
+                            <h:outputText value="Name:" />  
+                            <p:inputText value="#{userBean.selectedUser.name}"/>
+
+                            <h:outputText value="Email:" />  
+                            <p:inputText value="#{userBean.selectedUser.email}" size="60"/>  
+                            
+                            <h:outputText value="State: " />  
+                            <p:selectOneMenu value="#{userBean.selectedUser.state}">  
+                                <f:selectItem itemLabel="Activated" itemValue = "1" />  
+                                <f:selectItem itemLabel="Desactivated" itemValue = "0" />  
+                            </p:selectOneMenu>     
+                            
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreate" update=":formDataTable" oncomplete="PF('dialogUserCreate').hide();" actionListener="#{userBean.btnCreateUser(actionEvent)}" icon="ui-icon-disk" title="Save" value="Save"/> 
+                                <p:commandButton id="btnCancel"  oncomplete="PF('dialogUserCreate').hide();" icon="icon-cancel" title="Cancel" value="Cancel"/> 
+                            </f:facet>
+                        </h:panelGrid>  
+                    </p:dialog>  
+                </h:form>
+                
+                <h:form id="formUpdate">
+                    <p:dialog header="Modify User" id="dlgUserUpdate" widgetVar="dialogUserUpdate" resizable="false" showEffect="fade" hideEffect="explode" modal="true">
+                        <p:outputPanel id="carDetail" style="text-align:center;">
+                            <h:panelGrid  id="display" columns="2" cellpadding="6" style="margin:0 auto;">
+
+                                <h:outputText value="Id:" />
+                                <p:inputText value="#{userBean.selectedUser.id}" />
+
+                                <h:outputText value="Username:" />
+                                <p:inputText value="#{userBean.selectedUser.username}" />
+
+                                <h:outputText value="Password:" />
+                                <p:inputText value="#{userBean.selectedUser.password}" />
+
+                                <h:outputText value="Name:" />
+                                <p:inputText value="#{userBean.selectedUser.name}" />
+                                
+                                <h:outputText value="Role:" />
+                                <p:selectOneMenu value="#{userBean.selectedUser.role.id}">  
+                                    <f:selectItem itemLabel="- Select -" itemValue = "" />  
+                                    <f:selectItems value="#{roleBean.selectOneItemsRole}" />  
+                                </p:selectOneMenu>
+
+                                <h:outputText value="Email:" />
+                                <p:inputText value="$#{userBean.selectedUser.email}"  size="60" />
+                                
+                                <f:facet name="footer">
+                                    <p:separator/>
+                                    <p:commandButton id="btnUpdate" update=":formUpdate"  oncomplete="PF('dialogUserUpdate').hide();" actionListener="#{userBean.btnUpdateUser(actionEvent)}" icon="ui-icon-disk" title="Update" value="Update"/> 
+                                    <p:commandButton id="btnCancel"  oncomplete="PF('dialogUserUpdate').hide();" icon="icon-cancel" title="Cancel" value="Cancel"/> 
+                                </f:facet>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+ 
+                <h:form id="formDelete">
+                    <p:confirmDialog id="confirmDialog" message="Do you want to delete the user?"  showEffect="fade" hideEffect="explode"
+                                header="Delete User" severity="alert" widgetVar="dialogUserDelete">  
+                        <h:inputHidden value="#{userBean.selectedUser.id}"/>  
+                        <p:commandButton id="confirm" value="Yes Sure" update=":formDataTable, :msgs" oncomplete="PF('dialogUserDelete').hide();"  
+                                         actionListener="#{userBean.btnDeleteUser(actionEvent)}" icon="icon-check"/>  
+                        <p:commandButton id="decline" value="Not Yet" onclick="PF('dialogUserDelete').hide();" type="button"/>   
+                    </p:confirmDialog> 
+                </h:form>
+            </ui:define>
+</ui:composition>
+    

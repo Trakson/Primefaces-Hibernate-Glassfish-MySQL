@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated May 18, 2018 7:24:27 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Menu" table="menu" catalog="apprendrejlf" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="menu" class="model.Menu" fetch="select">
+            <column name="menu_id" not-null="true" />
+        </many-to-one>
+        <property name="level" type="java.lang.Integer">
+            <column name="level" />
+        </property>
+        <property name="order" type="java.lang.Integer">
+            <column name="order" />
+        </property>
+        <property name="name" type="string">
+            <column name="name" length="80" />
+        </property>
+        <property name="url" type="string">
+            <column name="url" length="120" />
+        </property>
+        <property name="icon" type="string">
+            <column name="icon" length="30" />
+        </property>
+        <property name="state" type="java.lang.Boolean">
+            <column name="state" />
+        </property>
+        <set name="menus" table="menu" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="menu_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Menu" />
+        </set>
+        <set name="roleMenus" table="role_menu" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="menu_id" not-null="true" />
+            </key>
+            <one-to-many class="model.RoleMenu" />
+        </set>
+    </class>
+</hibernate-mapping>
